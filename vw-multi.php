@@ -18,7 +18,6 @@ php vw-multi.php vw-giro.csv
 ini_set("auto_detect_line_endings", true);
 mb_regex_encoding("UTF-8");
 $row = 0;
-$csv_type = 0;
 
 if (!isset($argv[1])) {
   echo "Bitte CSV-Datei als Argument übergeben:
@@ -34,6 +33,9 @@ if (($in = fopen($argv[1], "r")) !== FALSE && ($out = fopen("vw-multi-out.csv", 
     while (($data = fgetcsv($in, 1000, "\t")) !== FALSE) {
         #echo mb_detect_encoding($data[2]) . "\n";
         $row++;
+
+        if ($row < 8)
+          continue;
 
         unset($data[0],
           $data[4],
@@ -51,9 +53,6 @@ if (($in = fopen($argv[1], "r")) !== FALSE && ($out = fopen("vw-multi-out.csv", 
 
         $data[2] = str_replace("�", 'Ü', $data[2]);
         #$data[2] = utf8_encode($data[2]);
-
-        if ($row < 8)
-          continue;
 
         switch ($data[2]) {
           case 'Lastschrift':
